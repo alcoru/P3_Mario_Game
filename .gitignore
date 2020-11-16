@@ -1,0 +1,25 @@
+
+.vs/*
+.vscode/*
+Library/*
+Assembly-CSharp.csproj
+Assembly-CSharp-Editor.csproj
+P3_Mario_Game.sln
+UserSettings/*
+Logs/*
+obj/*
+3DP3_CostaAlejandro_DuroManuel.sln
+Assets/Mario Assets/Models/Textures/Tiled/CreamRockTexture.bmp
+Assets/Mario Assets/Models/Textures/Tiled/RockTexture.bmp
+Assets/Tests.meta
+Assets/Tests/item_utils.cs
+Assets/Tests/item_utils.cs.meta
+Assets/Tests/Tests.asmdef
+Assets/Tests/Tests.asmdef.meta
+Tests.csproj
+Assets/Scripts/ItemUtils.cs
+Assets/Scripts/ItemUtils.cs.meta
+Assets/Scripts/IPlayerTest.cs
+Assets/Scripts/IPlayerTest.cs.meta
+Assets/NSubstitute.dll
+Assets/NSubstitute.dll.meta
