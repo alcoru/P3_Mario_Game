@@ -53,7 +53,12 @@ public class PlayerController : MonoBehaviour
         Vector3 l_forward = camera.forward;
         Vector3 l_right = camera.right;
 
-        l_forward.y = 0.0f;
+        //var hitRotation = Quaternion.FromToRotation(Vector3.up, Surface());
+        //transform.rotation = hitRotation;
+
+        Vector3 surface = Surface();
+
+        l_forward.y = (- (l_forward.x * surface.x) - (l_forward.z * surface.z)) / surface.y; //xa*xb + ya*yb + za*zb = 0
         l_forward.Normalize();
 
         l_right.y = 0.0f;
@@ -70,7 +75,11 @@ public class PlayerController : MonoBehaviour
 
         bool l_isMoving = l_Movement.magnitude > 0.0f;
         
-        if(l_isMoving) transform.forward = l_Movement;
+        if(l_isMoving)
+        {
+            transform.forward = l_Movement;
+            //transform.rotation = hitRotation;
+        } 
 
 
         float currentSpeedMultiplier = 1.0f;
@@ -131,5 +140,15 @@ public class PlayerController : MonoBehaviour
         Ray ray = new Ray(transform.position, transform.TransformDirection(Vector3.down));
 
         return Physics.Raycast(ray,out RaycastHit hit, groundThreshold, layerMask);
+    }
+
+    private Vector3 Surface()
+    {
+        Ray ray = new Ray(transform.position, Vector3.down);
+        
+        if(Physics.Raycast(ray,out RaycastHit hit, 5.0f, layerMask))
+            return hit.normal;
+        
+        return Vector3.up;
     }
 }
