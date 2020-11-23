@@ -6,6 +6,8 @@ public class PlayerController : MonoBehaviour
 {
     Animator animator;
 
+    Transform initialPosition;
+
     CharacterController characterController;
 
     [SerializeField] Transform camera;
@@ -34,6 +36,11 @@ public class PlayerController : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         characterController = GetComponent<CharacterController>();
+        initialPosition = transform;
+    }
+
+    void Start()
+    {
     }
 
     void Update()
