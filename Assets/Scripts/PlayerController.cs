@@ -65,7 +65,7 @@ public class PlayerController : MonoBehaviour
 
         Vector3 surface = Surface();
 
-        l_forward.y = (- (l_forward.x * surface.x) - (l_forward.z * surface.z)) / surface.y; //xa*xb + ya*yb + za*zb = 0
+        l_forward.y = 0.0f;//(- (l_forward.x * surface.x) - (l_forward.z * surface.z)) / surface.y; //xa*xb + ya*yb + za*zb = 0
         l_forward.Normalize();
 
         l_right.y = 0.0f;
