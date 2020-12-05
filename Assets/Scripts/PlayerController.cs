@@ -14,6 +14,7 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] float speed = 2.0f;
     [SerializeField] float speedMultiplier = 2.0f;
+    [SerializeField] Rigidbody bridgeRigidBody;
 
     public bool mOnGround;
     [SerializeField] float mHeightJump;
@@ -157,5 +158,13 @@ public class PlayerController : MonoBehaviour
             return hit.normal;
         
         return Vector3.up;
+    }
+    
+    void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        if(hit.gameObject.name.Equals(bridgeRigidBody.name)){
+            bridgeRigidBody.AddForceAtPosition(-hit.normal*5, hit.point);
+        }
+        
     }
 }
