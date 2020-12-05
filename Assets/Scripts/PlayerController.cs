@@ -8,16 +8,19 @@ public class PlayerController : MonoBehaviour
 
     Transform initialPosition;
 
-    CharacterController characterController;
+    public CharacterController characterController;
+
+    public float turnSmoothTime = 0.1f;
+    float turnSmoothVelocity;
 
     [SerializeField] Transform camera;
 
     [SerializeField] float speed = 2.0f;
     [SerializeField] float speedMultiplier = 2.0f;
-    [SerializeField] Rigidbody bridgeRigidBody;
 
     public bool mOnGround;
-    [SerializeField] float mHeightJump;
+    [SerializeField] float[] mHeightJump = new float[3] { 150f, 175f, 200f };
+    [SerializeField] float mHeightLongJump = 175f;
     [SerializeField] float mHalfLengthJump;
     [SerializeField] float mDownGravityMultiplier;
     [SerializeField] float mJumpMultiplier;
@@ -27,10 +30,19 @@ public class PlayerController : MonoBehaviour
     float mVerticalSpeed = 0.0f;
 
     private bool mDoJump = false;
+    private bool onAirSpecialJump = false;
+    private bool activeMove = true;
 
     [SerializeField] LayerMask layerMask;
 
     [SerializeField] float groundThreshold;
+
+    [SerializeField]
+    private float initialTimeToJump = 0.2f;
+    private float timeToJump = 0f;
+    private int jumps = 0;
+
+    Vector3 moveDir;
 
 
     void Awake()
@@ -42,11 +54,29 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
+
     }
 
     void Update()
     {
-        if(CanJump()) mDoJump = true;
+        if (CanJump()) mDoJump = true;
+        UpdateTimeToJump();
+
+    }
+
+    private void UpdateTimeToJump()
+    {
+        if (isGrounded())
+        {
+            if (timeToJump <= 0 || jumps>=mHeightJump.Length)
+            {
+                jumps = 0;
+            }
+            else
+            {
+                timeToJump -= Time.deltaTime;
+            }
+        }
     }
 
     void FixedUpdate()
@@ -58,75 +88,95 @@ public class PlayerController : MonoBehaviour
     {
         Vector3 l_Movement = new Vector3();
 
-        Vector3 l_forward = camera.forward;
-        Vector3 l_right = camera.right;
+        float h = Input.GetAxisRaw("Horizontal");
+        float v = Input.GetAxisRaw("Vertical");
 
-        //var hitRotation = Quaternion.FromToRotation(Vector3.up, Surface());
-        //transform.rotation = hitRotation;
+        Vector3 dir = new Vector3(h, 0, v).normalized;
 
-        Vector3 surface = Surface();
-
-        l_forward.y = 0.0f;//(- (l_forward.x * surface.x) - (l_forward.z * surface.z)) / surface.y; //xa*xb + ya*yb + za*zb = 0
-        l_forward.Normalize();
-
-        l_right.y = 0.0f;
-        l_right.Normalize();
-
-
-        if(Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W)) l_Movement += l_forward;
-        if(Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S)) l_Movement -= l_forward;
-        if(Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D)) l_Movement += l_right;
-        if(Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A)) l_Movement -= l_right;
-
-        
-        l_Movement.Normalize();
-
-        bool l_isMoving = l_Movement.magnitude > 0.0f;
-        
-        if(l_isMoving)
+        if (activeMove && dir.magnitude >= 0.1f)
         {
-            transform.forward = l_Movement;
-            //transform.rotation = hitRotation;
-        } 
+            float targetAngle = Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg + camera.eulerAngles.y;
+            float angleRotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, turnSmoothTime);
+            transform.rotation = Quaternion.Euler(0f, angleRotation, 0f);
 
+            moveDir = Quaternion.Euler(0, targetAngle, 0) * Vector3.forward;
 
-        float currentSpeedMultiplier = 1.0f;
+            float currentSpeedMultiplier = 1.0f;
+            if (Input.GetKey(KeyCode.LeftShift))
+                currentSpeedMultiplier = speedMultiplier;
+            
+            l_Movement = moveDir.normalized;
+            l_Movement *= speed * currentSpeedMultiplier;
 
-        if(Input.GetKey(KeyCode.LeftShift))
-        {
-            currentSpeedMultiplier = speedMultiplier;
+            characterController.Move(l_Movement * Time.deltaTime);
         }
-
-        l_Movement *= speed * currentSpeedMultiplier;
-
-        //characterController.Move(l_Movement * Time.fixedDeltaTime);
 
         float speedParam = (l_Movement.magnitude) / (speed * speedMultiplier);
         animator.SetFloat("Speed", speedParam);
-        Jump(l_Movement);
+        Gravity(l_Movement);
     }
 
-    private void Jump(Vector3 l_Movement)
+    private void Gravity(Vector3 l_Movement)
     {
-        float gravity = -2 * mHeightJump * speed * mJumpMultiplier * speed * mJumpMultiplier / (mHalfLengthJump * mHalfLengthJump);
-        if (mVerticalSpeed < 0) gravity *= mDownGravityMultiplier;
+        float gravity = -2 * mHeightJump[jumps] * speed * mJumpMultiplier * speed * mJumpMultiplier / (mHalfLengthJump * mHalfLengthJump);
+        if (mVerticalSpeed < 0 || !Input.GetKey(KeyCode.Space) || onAirSpecialJump) gravity *= mDownGravityMultiplier;
         mVerticalSpeed += gravity * Time.fixedDeltaTime;
         l_Movement.y = mVerticalSpeed * Time.fixedDeltaTime + 0.5f * gravity * Time.deltaTime * Time.deltaTime;
+        animator.SetFloat("VerticalMovement", l_Movement.y);
+
 
         CollisionFlags colls = characterController.Move(l_Movement * Time.fixedDeltaTime);
-        //mOnGround = (colls & CollisionFlags.Below) != 0;
         mOnGround = isGrounded();
-        //mContactCeiling = (colls & CollisionFlags.Above) != 0;
+        animator.SetBool("OnGround", mOnGround);
 
-        if (mOnGround) mVerticalSpeed = 0.0f;
-        //if (mContactCeiling && mVerticalSpeed > 0.0f) mVerticalSpeed = 0.0f;
+        if (mOnGround)
+        {
+            mVerticalSpeed = 0.0f;
+            onAirSpecialJump = false;
+        }
 
+        Jump();
+
+    }
+
+    private void Jump()
+    {
         if (mDoJump)
         {
-            mVerticalSpeed = 2 * mHeightJump * speed * mJumpMultiplier / mHalfLengthJump;
+            mVerticalSpeed = 2 * mHeightJump[jumps] * speed * mJumpMultiplier / mHalfLengthJump;
             mDoJump = false;
+            timeToJump = initialTimeToJump;
+            jumps += 1;
+            switch (jumps)
+            {
+                case 1:
+                    animator.SetTrigger("Jump");
+                    break;
+                case 2:
+                    animator.SetTrigger("DoubleJump");
+                    break;
+                default:
+                    animator.SetTrigger("TripleJump");
+                    break;
+            }
+
         }
     }
+
+    public void doLongJump(float height)
+    {
+        onAirSpecialJump = true;
+        animator.SetTrigger("LongJump");
+        mVerticalSpeed = 2 * height * speed * mJumpMultiplier / mHalfLengthJump;
+    }
+
+    public void doWallJump(float height)
+    {
+        onAirSpecialJump = true;
+        animator.SetTrigger("Jump");
+        mVerticalSpeed = 2 * height * speed * mJumpMultiplier / mHalfLengthJump;
+    }
+
 
     private bool CanJump()
     {
@@ -143,7 +193,7 @@ public class PlayerController : MonoBehaviour
         return false;
     }
 
-    private bool isGrounded()
+    public bool isGrounded()
     {
         Ray ray = new Ray(transform.position, transform.TransformDirection(Vector3.down));
 
@@ -159,12 +209,10 @@ public class PlayerController : MonoBehaviour
         
         return Vector3.up;
     }
-    
-    void OnControllerColliderHit(ControllerColliderHit hit)
+
+    public void activateMove(bool active)
     {
-        if(hit.gameObject.name.Equals(bridgeRigidBody.name)){
-            bridgeRigidBody.AddForceAtPosition(-hit.normal*5, hit.point);
-        }
-        
+        activeMove = active;
     }
+
 }
