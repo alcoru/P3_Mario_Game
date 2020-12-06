@@ -4,17 +4,17 @@ using UnityEngine;
 
 public class ResetTransform : MonoBehaviour, IRestartGame
 {
-   [SerializeField] Transform initialTransform;
+   Transform currentPositonTransform;
 
     Vector3 initPos;
     Quaternion initRot;
     public void Restart()
     {
         gameObject.SetActive(false);
-        if (initialTransform != null)
+        if (currentPositonTransform != null)
         {
-            transform.position = initialTransform.position;
-            transform.rotation = initialTransform.rotation;
+            transform.position = currentPositonTransform.position;
+            transform.rotation = currentPositonTransform.rotation;
         }
         else
         {
@@ -23,17 +23,6 @@ public class ResetTransform : MonoBehaviour, IRestartGame
         }
         gameObject.SetActive(true);
     }
-
-    // Start is called before the first frame update
-    /*void Start()
-    {
-        //GameManager.getInstance().addRestartGameObject(this);
-        GameManager.RestartGameEvent += Restart;
-        initPos = transform.position;
-        initRot = transform.rotation;
-
-    }*/
-
 
     private void OnDisable()
     {        
@@ -45,5 +34,10 @@ public class ResetTransform : MonoBehaviour, IRestartGame
         GameManager.RestartGameEvent += Restart;
         initPos = transform.position;
         initRot = transform.rotation;
+    }
+
+    public void SetCurrentPositionTransform(Transform transform)
+    {
+        currentPositonTransform = transform;
     }
 }
