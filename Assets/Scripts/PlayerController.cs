@@ -234,6 +234,6 @@ public class PlayerController : MonoBehaviour
 
     bool CanKillWithFeet(ControllerColliderHit enemy)
     {
-        return enemy.normal == Vector3.up;
+        return enemy.normal.y > 0.5;
     }
 }
