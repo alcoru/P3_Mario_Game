@@ -698,14 +698,7 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events:
-      - time: 0.082692884
-        functionName: Jump1
-        data: 
-        objectReferenceParameter: {fileID: 11500000, guid: fa7ad1cdd24f13549aa20e4d285ba743, type: 3}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
+      events: []
       transformMask:
       - path: 
         weight: 1
@@ -1221,14 +1214,7 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events:
-      - time: 0.17917252
-        functionName: LongJumpSound
-        data: 
-        objectReferenceParameter: {fileID: 11500000, guid: fa7ad1cdd24f13549aa20e4d285ba743, type: 3}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
+      events: []
       transformMask:
       - path: 
         weight: 1
@@ -2002,14 +1988,7 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events:
-      - time: 0.19418187
-        functionName: Jump2
-        data: 
-        objectReferenceParameter: {fileID: 11500000, guid: fa7ad1cdd24f13549aa20e4d285ba743, type: 3}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
+      events: []
       transformMask:
       - path: 
         weight: 1
@@ -3306,14 +3285,7 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events:
-      - time: 0.11496353
-        functionName: Jump3
-        data: 
-        objectReferenceParameter: {fileID: 11500000, guid: fa7ad1cdd24f13549aa20e4d285ba743, type: 3}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
+      events: []
       transformMask:
       - path: 
         weight: 1
@@ -4604,17 +4576,17 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 1
-        functionName: FinishPunch
+      - time: 0.062297776
+        functionName: StartPunch
         data: 
-        objectReferenceParameter: {fileID: 11500000, guid: fa7ad1cdd24f13549aa20e4d285ba743, type: 3}
+        objectReferenceParameter: {fileID: 11500000, guid: 984c1d9432f3659478e9996e4603b34c, type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.14566678
-        functionName: PunchSound1
+      - time: 1
+        functionName: EndPunch
         data: 
-        objectReferenceParameter: {fileID: 11500000, guid: fa7ad1cdd24f13549aa20e4d285ba743, type: 3}
+        objectReferenceParameter: {fileID: 11500000, guid: 984c1d9432f3659478e9996e4603b34c, type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
@@ -4747,17 +4719,17 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 1
-        functionName: FinishPunch
+      - time: 0.05349641
+        functionName: StartPunch
         data: 
-        objectReferenceParameter: {fileID: 11500000, guid: fa7ad1cdd24f13549aa20e4d285ba743, type: 3}
+        objectReferenceParameter: {fileID: 11500000, guid: d60101e0111c60144b9068e94b7a63f2, type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.110418096
-        functionName: PunchSound2
+      - time: 1
+        functionName: EndPunch
         data: 
-        objectReferenceParameter: {fileID: 11500000, guid: fa7ad1cdd24f13549aa20e4d285ba743, type: 3}
+        objectReferenceParameter: {fileID: 11500000, guid: d60101e0111c60144b9068e94b7a63f2, type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
@@ -4890,17 +4862,17 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 1
-        functionName: FinishPunch
+      - time: 0
+        functionName: StartPunch
         data: 
-        objectReferenceParameter: {fileID: 11500000, guid: fa7ad1cdd24f13549aa20e4d285ba743, type: 3}
+        objectReferenceParameter: {fileID: 11500000, guid: d60101e0111c60144b9068e94b7a63f2, type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.092729434
-        functionName: PunchSound3
+      - time: 0.7920569
+        functionName: EndPunch
         data: 
-        objectReferenceParameter: {fileID: 11500000, guid: fa7ad1cdd24f13549aa20e4d285ba743, type: 3}
+        objectReferenceParameter: {fileID: 11500000, guid: d60101e0111c60144b9068e94b7a63f2, type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0

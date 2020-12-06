@@ -8,18 +8,30 @@ public class Enemy : MonoBehaviour
     NavMeshAgent navMeshAgent;
     enum EnemyStates { PATROL, CHASE, ATTACK, DIE };
     EnemyStates currentState;
-    float timeToAttack = 1.0f;
+    float timeToAttack;
     [SerializeField] GameObject target;
 
     [SerializeField] private Vector3[] patrolPositions;
+    [SerializeField] private float attackRate;
     [SerializeField] private float maxChaseDistance;
     [SerializeField] private float minChaseDistance;
+    [SerializeField] private float maxSeeingDistance;
+    [SerializeField] private float maxAttackDistance;
+    [SerializeField] Transform enemyPointer;
+    [SerializeField] LayerMask layerMask;
+    [SerializeField] float actionRadius;
 
     private int countPatrol = 0;
+    private Animator animator;
+
+    private float walkingSpeed = 3.5f;
+    private float runningSpeed = 5f;
+
 
     private void Awake()
     {
         navMeshAgent = GetComponent<NavMeshAgent>();
+        animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -33,9 +45,9 @@ public class Enemy : MonoBehaviour
             case EnemyStates.CHASE:
                 UpdateCHASE();
                 break;
-            /*case EnemyStates.ATTACK:
+            case EnemyStates.ATTACK:
                 UpdateATTACK();
-                break;*/
+                break;
             case EnemyStates.DIE:
                 UpdateDIE();
                 break;
@@ -56,6 +68,15 @@ public class Enemy : MonoBehaviour
         currentState = newState;
         switch (currentState)
         {
+            case EnemyStates.PATROL:              
+                animator.SetBool("Chasing", false);
+                navMeshAgent.speed = walkingSpeed;
+                break;
+            case EnemyStates.CHASE:
+                animator.SetTrigger("PlayerDetected");
+                animator.SetBool("Chasing", true);
+                navMeshAgent.speed = runningSpeed;
+                break;
             case EnemyStates.ATTACK:
                 StartATTACK();
                 break;
@@ -64,48 +85,64 @@ public class Enemy : MonoBehaviour
 
     void StartATTACK()
     {
-        timeToAttack = 1.0f;
+        timeToAttack = 0;
     }
 
     void UpdatePATROL()
     {
         navMeshAgent.destination = patrolPositions[countPatrol];
-        if ((transform.position - patrolPositions[countPatrol]).magnitude < 0.1f)
-
+        if ((transform.position - patrolPositions[countPatrol]).magnitude < 0.5f)
             if (countPatrol == patrolPositions.Length-1)
                 countPatrol = 0;
             else
                 countPatrol++;
+
+        if ((transform.position - target.transform.position).magnitude < actionRadius)
+        {
+            if (target.transform.gameObject.tag == "Player")
+            {  
+                SetState(EnemyStates.CHASE);
+            }
+        }
 
     }
 
     void UpdateCHASE()
     {
         if ((transform.position - target.transform.position).magnitude > maxChaseDistance)
+        {
             SetState(EnemyStates.PATROL);
+        }
         else if ((transform.position - target.transform.position).magnitude > minChaseDistance)
+        {
             navMeshAgent.destination = target.transform.position;
+        }
         else
             SetState(EnemyStates.ATTACK);
     }
 
-    /*void UpdateATTACK()
+    void UpdateATTACK()
     {
         transform.LookAt(target.transform);
         if (timeToAttack <= 0)
         {
-            Instantiate(projectile, enemyPointer.position, enemyPointer.rotation);
-            timeShoot = startTimeShoot;
+            timeToAttack = attackRate;
+            HealthSystem healthBar = target.GetComponent<HealthSystem>();
+            if(healthBar != null)
+                healthBar.DealDamage();
         }
-        else timeShoot -= Time.deltaTime;
+        else timeToAttack -= Time.deltaTime;
 
-        if ((transform.position - target.transform.position).magnitude > maxShootDistance)
+        if ((transform.position - target.transform.position).magnitude > maxAttackDistance)
+        {
             SetState(EnemyStates.CHASE);
-    }*/
+        }
+
+    }
 
     void UpdateDIE()
     {
-        Destroy(this);
+        Destroy(gameObject);
     }
 
     void EndPATROL()
@@ -116,5 +153,11 @@ public class Enemy : MonoBehaviour
     void EndCHASE()
     {
         navMeshAgent.destination = transform.position;
+    }
+
+    public void KillEnemy()
+    {
+        Debug.Log("Holaaa");
+        SetState(EnemyStates.DIE);
     }
 }

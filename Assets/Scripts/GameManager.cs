@@ -10,10 +10,6 @@ public delegate void RestartGameDelegate();
 
     public void RestartGame()
     {
-        /*foreach(IRestartGame restart in restartGameObjects)
-        {
-            restart.Restart();
-        }*/
         RestartGameEvent.Invoke();
     }
 

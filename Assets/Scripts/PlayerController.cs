@@ -215,4 +215,25 @@ public class PlayerController : MonoBehaviour
         activeMove = active;
     }
 
+    public void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        if(hit.transform.GetComponent<Enemy>())
+        {
+            if(CanKillWithFeet(hit))
+            {
+                hit.transform.GetComponent<Enemy>().KillEnemy();
+                mVerticalSpeed = 2 * 200.0f * speed * mJumpMultiplier / mHalfLengthJump;
+            }
+        }
+
+        if(hit.transform.GetComponent<BridgePlayerCollision>())
+        {
+            hit.transform.GetComponent<BridgePlayerCollision>().AddForce(hit.normal, hit.point);
+        }
+    }
+
+    bool CanKillWithFeet(ControllerColliderHit enemy)
+    {
+        return enemy.normal == Vector3.up;
+    }
 }

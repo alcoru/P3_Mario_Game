@@ -11,10 +11,8 @@ public class BridgePlayerCollision : MonoBehaviour
     {
         bridgeRigidBody = GetComponent<Rigidbody>();
     }
-    void OnControllerColliderHit(ControllerColliderHit hit)
-    {
-        Debug.Log("holaaaaa");
-        
-        bridgeRigidBody.AddForceAtPosition(-hit.normal*bridgeForce, hit.point);
+    public void AddForce(Vector3 normal, Vector3 point)
+    {   
+        bridgeRigidBody.AddForceAtPosition(-normal * bridgeForce, point);
     }
 }
