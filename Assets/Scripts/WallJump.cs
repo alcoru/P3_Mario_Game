@@ -20,7 +20,7 @@ public class WallJump : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && isWalled() && !playerController.isGrounded())
+        if (Input.GetButtonDown("Jump") && isWalled() && !playerController.isGrounded())
         {
             StartCoroutine(Jump());
         }

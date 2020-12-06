@@ -125,7 +125,7 @@ public class PlayerController : MonoBehaviour
             moveDir = Quaternion.Euler(0, targetAngle, 0) * Vector3.forward;
 
             float currentSpeedMultiplier = 1.0f;
-            if (Input.GetKey(KeyCode.LeftShift))
+            if (Input.GetButton("Run"))
                 currentSpeedMultiplier = speedMultiplier;
             
             l_Movement = moveDir.normalized;
@@ -142,7 +142,7 @@ public class PlayerController : MonoBehaviour
     private void Gravity(Vector3 l_Movement)
     {
         float gravity = -2 * mHeightJump[jumps] * speed * mJumpMultiplier * speed * mJumpMultiplier / (mHalfLengthJump * mHalfLengthJump);
-        if (mVerticalSpeed < 0 || !Input.GetKey(KeyCode.Space) || onAirSpecialJump) gravity *= mDownGravityMultiplier;
+        if (mVerticalSpeed < 0 || !Input.GetButton("Jump") || onAirSpecialJump) gravity *= mDownGravityMultiplier;
         mVerticalSpeed += gravity * Time.fixedDeltaTime;
         l_Movement.y = mVerticalSpeed * Time.fixedDeltaTime + 0.5f * gravity * Time.deltaTime * Time.deltaTime;
         animator.SetFloat("VerticalMovement", l_Movement.y);
@@ -208,12 +208,12 @@ public class PlayerController : MonoBehaviour
 
     private bool CanJump()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && !mOnGround && extraJumps > 0)
+        if (Input.GetButtonDown("Jump") && !mOnGround && extraJumps > 0)
         {
             extraJumps--;
             return true;
         }
-        else if (Input.GetKeyDown(KeyCode.Space) && mOnGround)
+        else if (Input.GetButtonDown("Jump") && mOnGround)
         {
             extraJumps = maxExtraJumps;
             return true;

@@ -24,7 +24,7 @@ public class SuperMarioAttack : MonoBehaviour
 
     void Update()
     {
-        if(Input.GetMouseButtonDown(0) && isPunchFinished)
+        if(Input.GetButtonDown("Punch") && isPunchFinished)
         {
             punch ++;
             if(punch > 3) punch = 1;
