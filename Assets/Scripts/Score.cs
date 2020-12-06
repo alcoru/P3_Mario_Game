@@ -9,4 +9,9 @@ public class Score : ScriptableObject {
         IScoreManager score = DependencyInjector.GetDependency<IScoreManager>();
         score.addPoints(points);
     }
+
+    public float TotalPoints()
+    {
+        return points;
+    }
 }
