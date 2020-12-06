@@ -20,4 +20,14 @@ public delegate void RestartGameDelegate();
             RestartGame();
         }
     }
+
+    public void Retry()
+    {
+        RestartGame();
+    }
+
+    public void Exit()
+    {
+        Application.Quit();
+    }
 }

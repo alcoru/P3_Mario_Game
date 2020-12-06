@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class HealthSystem : MonoBehaviour
 {
+    [SerializeField] GameObject gameManager;
+    private GameOverSystem gameOverSystem;
     Animator animator;
     private int maxHealth = 8;
     private int currentHealth;
@@ -14,16 +16,39 @@ public class HealthSystem : MonoBehaviour
     {
         currentHealth = maxHealth;
         animator = GetComponent<Animator>();
+        gameOverSystem = GetComponent<GameOverSystem>();
     }
     public void DealDamage(int damage = 1)
     {
         currentHealth -= damage;
         if(currentHealth <= 0)
         {
-           Debug.Log("Game Over"); 
            animator.SetBool("Dead", true);
+           //WaitTillAnimationIsFinished();
+           gameManager.GetComponent<GameOverSystem>().GameOver();
         }
         healthBar.UpdateHealthBar(currentHealth);
         animator.SetTrigger("Hit");
+    }
+    
+    void Restart()
+    {
+        currentHealth = maxHealth;
+        healthBar.UpdateHealthBar(currentHealth);
+    }
+
+    IEnumerator WaitTillAnimationIsFinished()
+    {
+        yield return new WaitForSeconds(1.0f);
+    }
+
+    protected void OnEnable()
+    {        
+        GameManager.RestartGameEvent += Restart;
+    }
+
+    private void OnDisable()
+    {        
+        GameManager.RestartGameEvent -= Restart;       
     }
 }

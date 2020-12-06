@@ -25,6 +25,8 @@ public class CameraController : MonoBehaviour
 
     private Vector3 m_LastPosition;
 
+    [SerializeField] GameObject gameManager;
+
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
