@@ -51,4 +51,14 @@ public class HealthSystem : MonoBehaviour
     {        
         GameManager.RestartGameEvent -= Restart;       
     }
+    
+    public void AddHealth(int health = 1)
+    {
+        currentHealth += health;
+        if (currentHealth >= maxHealth)
+        {
+            currentHealth = maxHealth;
+        }
+        healthBar.UpdateHealthBar(currentHealth);
+    }
 }
