@@ -8,7 +8,6 @@ public class DeadZone : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            Debug.Log("HEEEEY");
             GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameOverSystem>().GameOver();
         }
     }

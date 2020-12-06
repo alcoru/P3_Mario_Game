@@ -21,11 +21,11 @@ public class Take : MonoBehaviour
 
     private void Update()
     {
-        if (!attachedBody && Input.GetMouseButtonDown(1))
+        if (!attachedBody && Input.GetButtonDown("Grab"))
         {
             attachedBody = tryToTake();
         }
-        else if (attachedBody && (Input.GetMouseButtonDown(1)))
+        else if (attachedBody && (Input.GetButtonDown("Grab")))
         {
             AudioManager.PlaySound("kick");
             detachObject(throwForce);

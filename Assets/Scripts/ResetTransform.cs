@@ -4,17 +4,19 @@ using UnityEngine;
 
 public class ResetTransform : MonoBehaviour, IRestartGame
 {
-   Transform currentPositonTransform;
+
+   Transform currentPositionTransform;
 
     Vector3 initPos;
     Quaternion initRot;
     public void Restart()
     {
         gameObject.SetActive(false);
-        if (currentPositonTransform != null)
+        if (currentPositionTransform != null)
         {
-            transform.position = currentPositonTransform.position;
-            transform.rotation = currentPositonTransform.rotation;
+            transform.position = currentPositionTransform.position;
+            transform.rotation = currentPositionTransform.rotation;
+
         }
         else
         {
@@ -23,6 +25,7 @@ public class ResetTransform : MonoBehaviour, IRestartGame
         }
         gameObject.SetActive(true);
     }
+
 
     private void OnDisable()
     {        
@@ -38,6 +41,6 @@ public class ResetTransform : MonoBehaviour, IRestartGame
 
     public void SetCurrentPositionTransform(Transform transform)
     {
-        currentPositonTransform = transform;
+        currentPositionTransform = transform;
     }
 }

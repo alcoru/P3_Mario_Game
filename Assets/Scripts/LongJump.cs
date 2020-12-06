@@ -18,7 +18,7 @@ public class LongJump : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.F) && canLongJump)
+        if (Input.GetButtonDown("LongJump") && canLongJump)
         {
             StartCoroutine(Dash());
         }
