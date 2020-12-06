@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class ResetTransform : MonoBehaviour, IRestartGame
 {
+
    Transform currentPositionTransform;
 
     Vector3 initPos;
@@ -15,6 +16,7 @@ public class ResetTransform : MonoBehaviour, IRestartGame
         {
             transform.position = currentPositionTransform.position;
             transform.rotation = currentPositionTransform.rotation;
+
         }
         else
         {
