@@ -6,8 +6,13 @@ public class Coin : MonoBehaviour
 {
     [SerializeField] Score score;
     private void OnTriggerEnter(Collider other) {
-        if (score != null)
-            score.score();
-        Destroy(gameObject);
+        if (other.CompareTag("Player"))
+        {
+            if (score != null)
+                score.score();
+            AudioManager.PlaySound("coin");
+            Destroy(gameObject);
+        }
+        
     } 
 }

@@ -29,6 +29,7 @@ public class HealthSystem : MonoBehaviour
         }
         healthBar.UpdateHealthBar(currentHealth);
         animator.SetTrigger("Hit");
+        AudioManager.PlaySound("take_damage");
     }
     
     void Restart()

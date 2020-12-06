@@ -33,12 +33,15 @@ public class SuperMarioAttack : MonoBehaviour
             {
                 case 1:
                     animator.SetTrigger("Punch1");
+                    AudioManager.PlaySound("punch1");
                     break;
                 case 2:
                     animator.SetTrigger("Punch2");
+                    AudioManager.PlaySound("punch2");
                     break;
                 default:
                     animator.SetTrigger("Punch3");
+                    AudioManager.PlaySound("kick");
                     break;
             }
         }

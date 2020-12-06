@@ -8,7 +8,11 @@ public class Star : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
+        {
             other.GetComponent<HealthSystem>().AddHealth(health);
-        Destroy(gameObject);
+            AudioManager.PlaySound("upgrade");
+            Destroy(gameObject);
+        }
+            
     }
 }
