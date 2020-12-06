@@ -26,4 +26,14 @@ public class HealthSystem : MonoBehaviour
         healthBar.UpdateHealthBar(currentHealth);
         animator.SetTrigger("Hit");
     }
+
+    public void AddHealth(int health = 1)
+    {
+        currentHealth += health;
+        if (currentHealth >= maxHealth)
+        {
+            currentHealth = maxHealth;
+        }
+        healthBar.UpdateHealthBar(currentHealth);
+    }
 }
