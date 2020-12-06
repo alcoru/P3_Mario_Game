@@ -13,8 +13,13 @@ public class Coin : MonoBehaviour
         textScore = GameObject.FindGameObjectWithTag("ScoreText").GetComponent<Text>();
     }
     private void OnTriggerEnter(Collider other) {
-        if (score != null)
-            score.score();
-        Destroy(gameObject);
+        if (other.CompareTag("Player"))
+        {
+            if (score != null)
+                score.score();
+            AudioManager.PlaySound("coin");
+            Destroy(gameObject);
+        }
+        
     } 
 }

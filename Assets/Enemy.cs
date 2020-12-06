@@ -20,6 +20,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] Transform enemyPointer;
     [SerializeField] LayerMask layerMask;
     [SerializeField] float actionRadius;
+    [SerializeField] GameObject dropItem;
 
     private int countPatrol = 0;
     private Animator animator;
@@ -142,6 +143,10 @@ public class Enemy : MonoBehaviour
 
     void UpdateDIE()
     {
+        if (dropItem != null)
+        {
+            Instantiate(dropItem, transform.position+Vector3.up, transform.rotation);
+        }
         Destroy(gameObject);
     }
 
@@ -157,7 +162,7 @@ public class Enemy : MonoBehaviour
 
     public void KillEnemy()
     {
-        Debug.Log("Holaaa");
+        AudioManager.PlaySound("goombaDead");
         SetState(EnemyStates.DIE);
     }
 }

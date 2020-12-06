@@ -44,12 +44,16 @@ public class PlayerController : MonoBehaviour
 
     Vector3 moveDir;
 
+    [SerializeField] private float specialIdleTime = 10f;
+    private float idleTime;
+
 
     void Awake()
     {
         animator = GetComponent<Animator>();
         characterController = GetComponent<CharacterController>();
         initialPosition = transform;
+        idleTime = specialIdleTime;
     }
 
     void Start()
@@ -61,7 +65,26 @@ public class PlayerController : MonoBehaviour
     {
         if (CanJump()) mDoJump = true;
         UpdateTimeToJump();
+        SpecialIdle();
 
+    }
+
+    private void SpecialIdle()
+    {
+        if (characterController.velocity.magnitude == 0)
+        {
+            if (idleTime > 0)
+                idleTime -= Time.deltaTime;
+            else
+            {
+                animator.SetTrigger("SpecialIdle");
+                idleTime = specialIdleTime;
+            }
+        }
+        else
+        {
+            idleTime = specialIdleTime;
+        }
     }
 
     private void UpdateTimeToJump()
@@ -151,12 +174,15 @@ public class PlayerController : MonoBehaviour
             {
                 case 1:
                     animator.SetTrigger("Jump");
+                    AudioManager.PlaySound("jump1");
                     break;
                 case 2:
                     animator.SetTrigger("DoubleJump");
+                    AudioManager.PlaySound("jump2");
                     break;
                 default:
                     animator.SetTrigger("TripleJump");
+                    AudioManager.PlaySound("jump3");
                     break;
             }
 
@@ -167,6 +193,7 @@ public class PlayerController : MonoBehaviour
     {
         onAirSpecialJump = true;
         animator.SetTrigger("LongJump");
+        AudioManager.PlaySound("long_jump");
         mVerticalSpeed = 2 * height * speed * mJumpMultiplier / mHalfLengthJump;
     }
 
@@ -174,6 +201,7 @@ public class PlayerController : MonoBehaviour
     {
         onAirSpecialJump = true;
         animator.SetTrigger("Jump");
+        AudioManager.PlaySound("jump1");
         mVerticalSpeed = 2 * height * speed * mJumpMultiplier / mHalfLengthJump;
     }
 
